@@ -2,8 +2,10 @@
   "name": "quepasa-typescript",
   "version": "1.0.0",
   "description": "API for RAG retrieval, managing documents, files, and related operations including Telegram integration.",
-  "main": "index.ts",
-  "scripts": {},
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Askrobot-io/quepasa-typescript.git"
@@ -19,5 +21,12 @@
   "bugs": {
     "url": "https://github.com/Askrobot-io/quepasa-typescript/issues"
   },
-  "homepage": "https://github.com/Askrobot-io/quepasa-typescript#readme"
+  "homepage": "https://github.com/Askrobot-io/quepasa-typescript#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.25.7",
+    "@babel/core": "^7.25.7",
+    "@babel/preset-env": "^7.25.7",
+    "@babel/preset-typescript": "^7.25.7",
+    "typescript": "^5.6.2"
+  }
 }
