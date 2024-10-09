@@ -1,6 +1,6 @@
 {
-  "name": "quepasa-typescript",
-  "version": "1.0.0",
+  "name": "quepasa-ai",
+  "version": "1.0.1",
   "description": "API for RAG retrieval, managing documents, files, and related operations including Telegram integration.",
   "main": "./dist/index.js",
   "scripts": {
