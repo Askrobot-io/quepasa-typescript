@@ -21,7 +21,7 @@ export interface RetrieveAnswerRequest {
      * @type {string}
      * @memberof RetrieveAnswerRequest
      */
-    question?: string;
+    question: string;
     /**
      *
      * @type {RetrieveAnswerRequestUserInfo}

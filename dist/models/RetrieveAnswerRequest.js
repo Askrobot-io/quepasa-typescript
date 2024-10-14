@@ -32,7 +32,7 @@ function RetrieveAnswerRequestFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'question': json['question'] == null ? undefined : json['question'],
+        'question': json['question'],
         'userInfo': json['user_info'] == null ? undefined : (0, RetrieveAnswerRequestUserInfo_1.RetrieveAnswerRequestUserInfoFromJSON)(json['user_info']),
     };
 }

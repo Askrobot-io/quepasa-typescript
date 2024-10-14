@@ -89,7 +89,7 @@ Some notable LLMs are OpenAI's GPT series of models (e.g., GPT-3.5, GPT-4 and GP
             // - 'created_at': "2024-05-20T07:26:06Z", // document creation datetime, by default datetime of first creation of this document via API
             // - 'updated_at': "2024-05-20T07:26:06Z", // document last update datetime, by default datetime of last update of this document via API
         },
-    ]
+    ],
 });
 ```
 
@@ -106,7 +106,16 @@ const file = new File([ fileContent ], filename, {type: "application/pdf"}); // 
 
 let results = await quepasa.upsertFile({
     domain: domain,
-    file: file
+    file: file,
+});
+```
+
+### List documents
+```typescript
+const domain = "default";
+
+let results = await quepasa.listDocuments({
+    domain: domain,
 });
 ```
 
@@ -133,5 +142,32 @@ const domain = "default";
 
 let results = await quepasa.removeDomain({
     domain: domain,
+});
+```
+
+### Get document
+```typescript
+const domain = "default";
+const doc_id = "llm";
+
+let documentResult = await quepasa.getDocument({
+    domain: "default",
+    id: doc_id,
+});
+```
+
+### Retrieve answer
+```typescript
+let results = await quepasa.retrieveAnswer({
+    question: "What is LLM?",
+    // domain: domain, // [Optional]
+});
+```
+
+### Retrieve chunks
+```typescript
+let results = await quepasa.retrieveChunks({
+    question: "What is LLM?",
+    // domain: domain, // [Optional]
 });
 ```

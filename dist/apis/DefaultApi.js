@@ -354,8 +354,8 @@ class DefaultApi extends runtime.BaseAPI {
      * Retrieve answers or search data
      */
     async retrieveAnswerRaw(requestParameters, initOverrides) {
-        if (requestParameters['retrieveAnswerRequest'] == null) {
-            throw new runtime.RequiredError('retrieveAnswerRequest', 'Required parameter "retrieveAnswerRequest" was null or undefined when calling retrieveAnswer().');
+        if (requestParameters['question'] == null) {
+            throw new runtime.RequiredError('question', 'Required parameter "question" was null or undefined when calling retrieveAnswer().');
         }
         const queryParameters = {};
         const headerParameters = {};
@@ -372,7 +372,7 @@ class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: (0, index_1.RetrieveAnswerRequestToJSON)(requestParameters['retrieveAnswerRequest']),
+            body: (0, index_1.RetrieveAnswerRequestToJSON)(requestParameters),
         }, initOverrides);
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.AnswerDetailFromJSON)(jsonValue));
     }
@@ -389,9 +389,6 @@ class DefaultApi extends runtime.BaseAPI {
      * Retrieve answers or search data
      */
     async retrieveChunksRaw(requestParameters, initOverrides) {
-        if (requestParameters['retrieveAnswerRequest'] == null) {
-            throw new runtime.RequiredError('retrieveAnswerRequest', 'Required parameter "retrieveAnswerRequest" was null or undefined when calling retrieveChunks().');
-        }
         const queryParameters = {};
         const headerParameters = {};
         headerParameters['Content-Type'] = 'application/json';
@@ -407,7 +404,7 @@ class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: (0, index_1.RetrieveAnswerRequestToJSON)(requestParameters['retrieveAnswerRequest']),
+            body: (0, index_1.RetrieveAnswerRequestToJSON)(requestParameters),
         }, initOverrides);
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.ChunksDetailFromJSON)(jsonValue));
     }
@@ -424,9 +421,6 @@ class DefaultApi extends runtime.BaseAPI {
      * Setup Telegram integration
      */
     async setupTelegramRaw(requestParameters, initOverrides) {
-        if (requestParameters['setupTelegramRequest'] == null) {
-            throw new runtime.RequiredError('setupTelegramRequest', 'Required parameter "setupTelegramRequest" was null or undefined when calling setupTelegram().');
-        }
         const queryParameters = {};
         const headerParameters = {};
         headerParameters['Content-Type'] = 'application/json';
@@ -442,7 +436,7 @@ class DefaultApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: (0, index_1.SetupTelegramRequestToJSON)(requestParameters['setupTelegramRequest']),
+            body: (0, index_1.SetupTelegramRequestToJSON)(requestParameters),
         }, initOverrides);
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.TelegramStatusFromJSON)(jsonValue));
     }

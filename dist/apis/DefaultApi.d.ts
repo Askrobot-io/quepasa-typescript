@@ -32,12 +32,6 @@ export interface ReplaceDocumentsRequest {
 export interface RemoveDomain {
     domain: string;
 }
-export interface RetrieveAnswerOperationRequest {
-    retrieveAnswerRequest: RetrieveAnswerRequest;
-}
-export interface RetrieveChunksRequest {
-    retrieveAnswerRequest: RetrieveAnswerRequest;
-}
 export interface SetupTelegramOperationRequest {
     setupTelegramRequest: SetupTelegramRequest;
 }
@@ -172,32 +166,32 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
      */
-    retrieveAnswerRaw(requestParameters: RetrieveAnswerOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AnswerDetail>>;
+    retrieveAnswerRaw(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AnswerDetail>>;
     /**
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
      */
-    retrieveAnswer(requestParameters: RetrieveAnswerOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetail>;
+    retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetail>;
     /**
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    retrieveChunksRaw(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>>;
+    retrieveChunksRaw(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>>;
     /**
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail>;
+    retrieveChunks(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail>;
     /**
      * Configure Telegram for notifications or integrations.
      * Setup Telegram integration
      */
-    setupTelegramRaw(requestParameters: SetupTelegramOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TelegramStatus>>;
+    setupTelegramRaw(requestParameters: SetupTelegramRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TelegramStatus>>;
     /**
      * Configure Telegram for notifications or integrations.
      * Setup Telegram integration
      */
-    setupTelegram(requestParameters: SetupTelegramOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TelegramStatus>;
+    setupTelegram(requestParameters: SetupTelegramRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TelegramStatus>;
     /**
      * Insert new documents or update existing ones based on the ID.
      * Upsert documents

@@ -80,14 +80,6 @@ export interface RemoveDomain {
     domain: string;
 }
 
-export interface RetrieveAnswerOperationRequest {
-    retrieveAnswerRequest: RetrieveAnswerRequest;
-}
-
-export interface RetrieveChunksRequest {
-    retrieveAnswerRequest: RetrieveAnswerRequest;
-}
-
 export interface SetupTelegramOperationRequest {
     setupTelegramRequest: SetupTelegramRequest;
 }
@@ -524,11 +516,11 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
      */
-    async retrieveAnswerRaw(requestParameters: RetrieveAnswerOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AnswerDetail>> {
-        if (requestParameters['retrieveAnswerRequest'] == null) {
+    async retrieveAnswerRaw(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AnswerDetail>> {
+        if (requestParameters['question'] == null) {
             throw new runtime.RequiredError(
-                'retrieveAnswerRequest',
-                'Required parameter "retrieveAnswerRequest" was null or undefined when calling retrieveAnswer().'
+                'question',
+                'Required parameter "question" was null or undefined when calling retrieveAnswer().'
             );
         }
 
@@ -551,7 +543,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RetrieveAnswerRequestToJSON(requestParameters['retrieveAnswerRequest']),
+            body: RetrieveAnswerRequestToJSON(requestParameters),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AnswerDetailFromJSON(jsonValue));
@@ -561,7 +553,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
      */
-    async retrieveAnswer(requestParameters: RetrieveAnswerOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetail> {
+    async retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetail> {
         const response = await this.retrieveAnswerRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -570,14 +562,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    async retrieveChunksRaw(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>> {
-        if (requestParameters['retrieveAnswerRequest'] == null) {
-            throw new runtime.RequiredError(
-                'retrieveAnswerRequest',
-                'Required parameter "retrieveAnswerRequest" was null or undefined when calling retrieveChunks().'
-            );
-        }
-
+    async retrieveChunksRaw(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -597,7 +582,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RetrieveAnswerRequestToJSON(requestParameters['retrieveAnswerRequest']),
+            body: RetrieveAnswerRequestToJSON(requestParameters),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ChunksDetailFromJSON(jsonValue));
@@ -607,7 +592,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    async retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail> {
+    async retrieveChunks(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail> {
         const response = await this.retrieveChunksRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -616,14 +601,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Configure Telegram for notifications or integrations.
      * Setup Telegram integration
      */
-    async setupTelegramRaw(requestParameters: SetupTelegramOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TelegramStatus>> {
-        if (requestParameters['setupTelegramRequest'] == null) {
-            throw new runtime.RequiredError(
-                'setupTelegramRequest',
-                'Required parameter "setupTelegramRequest" was null or undefined when calling setupTelegram().'
-            );
-        }
-
+    async setupTelegramRaw(requestParameters: SetupTelegramRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TelegramStatus>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -643,7 +621,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
-            body: SetupTelegramRequestToJSON(requestParameters['setupTelegramRequest']),
+            body: SetupTelegramRequestToJSON(requestParameters),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => TelegramStatusFromJSON(jsonValue));
@@ -653,7 +631,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * Configure Telegram for notifications or integrations.
      * Setup Telegram integration
      */
-    async setupTelegram(requestParameters: SetupTelegramOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TelegramStatus> {
+    async setupTelegram(requestParameters: SetupTelegramRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TelegramStatus> {
         const response = await this.setupTelegramRaw(requestParameters, initOverrides);
         return await response.value();
     }
