@@ -70,13 +70,18 @@ class DefaultApi extends runtime.BaseAPI {
                 catch (error) {
                     clearTimeout(timeout);
                     clearInterval(interval);
-                    reject(error); // Reject the promise if an error occurs
+                    reject({
+                        error: error
+                    }); // Reject the promise if an error occurs
                 }
             }, intervalValue);
             let timeout = setTimeout(async () => {
                 clearTimeout(timeout);
                 clearInterval(interval);
-                reject("waitForBatch timeout");
+                reject({
+                    error: "waitForBatch timeout",
+                    batchId: createdBatchStatus.data.batchId + "",
+                });
             }, timeoutValue);
         });
     }
