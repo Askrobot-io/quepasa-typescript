@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { AnswerDetail, BatchStatus, ChunksDetail, CreatedBatchStatus, Document, DocumentDetail, RetrieveAnswerRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
+import type { AnswerDetail, BatchStatus, BatchStatusData, ChunksDetail, CreatedBatchStatus, Document, DocumentDetail, RetrieveAnswerRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
 export interface GetBatchStatusRequest {
     id: string;
 }
@@ -27,9 +27,9 @@ export interface RemoveDocumentRequest {
 }
 export interface ReplaceDocumentsRequest {
     domain: string;
-    document: Array<Document>;
+    documents: Array<Document>;
 }
-export interface ResetDocumentsRequest {
+export interface RemoveDomain {
     domain: string;
 }
 export interface RetrieveAnswerOperationRequest {
@@ -43,9 +43,9 @@ export interface SetupTelegramOperationRequest {
 }
 export interface UpsertDocumentsRequest {
     domain: string;
-    document: Array<Document>;
+    documents: Array<Document>;
 }
-export interface UpsertFilesRequest {
+export interface UpsertFileRequest {
     domain: string;
     file: Blob;
     language?: string;
@@ -65,6 +65,10 @@ export declare class DefaultApi extends runtime.BaseAPI {
      */
     getBatchStatus(requestParameters: GetBatchStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatus>;
     /**
+     * Wait for status of a batch
+     */
+    waitForBatch(createdBatchStatus: CreatedBatchStatus, intervalValue?: number, timeoutValue?: number): Promise<BatchStatus>;
+    /**
      * Retrieve details of a document by its domain and ID.
      * Get document details
      */
@@ -81,9 +85,20 @@ export declare class DefaultApi extends runtime.BaseAPI {
     listDocumentsRaw(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
     /**
      * List all document IDs in the specified domain.
-     * List documents
+     * List documents, returns batch id to track operation status.
      */
-    listDocuments(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    listDocumentsAsync(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    /**
+     * List all document IDs in the specified domain.
+     * List documents, returns list of document ids for requested domain.
+     */
+    listDocumentsAndWait(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * List all document IDs in the specified domain.
+     * List documents, returns list of document ids for requested domain.
+     * (alias to listDocumentsAndWait)
+     */
+    listDocuments(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
     /**
      * Remove a specific document by its domain and ID.
      * Remove document
@@ -91,9 +106,26 @@ export declare class DefaultApi extends runtime.BaseAPI {
     removeDocumentRaw(requestParameters: RemoveDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
     /**
      * Remove a specific document by its domain and ID.
-     * Remove document
+     * Remove document, returns batch id to track operation status.
      */
-    removeDocument(requestParameters: RemoveDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    removeDocumentAsync(requestParameters: RemoveDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    /**
+     * Remove a specific document by its domain and ID.
+     * Remove document, returns list of removed document ids for requested domain.
+     */
+    removeDocumentAndWait(requestParameters: RemoveDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Remove a specific document by its domain and ID.
+     * Remove document, returns list of removed document ids for requested domain.
+     * (alias to removeDocumentAndWait)
+     */
+    removeDocument(requestParameters: RemoveDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Remove a specific file by its domain and ID.
+     * Remove file, returns list of removed document ids for requested domain.
+     * (alias to removeDocument)
+     */
+    removeFile(requestParameters: RemoveDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
     /**
      * Replace all documents in the specified domain with the provided documents.
      * Replace documents
@@ -101,19 +133,41 @@ export declare class DefaultApi extends runtime.BaseAPI {
     replaceDocumentsRaw(requestParameters: ReplaceDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
     /**
      * Replace all documents in the specified domain with the provided documents.
-     * Replace documents
+     * Replace documents, returns batch id to track operation status.
      */
-    replaceDocuments(requestParameters: ReplaceDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    replaceDocumentsAsync(requestParameters: ReplaceDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    /**
+     * Replace all documents in the specified domain with the provided documents.
+     * Replace documents, returns list of replaced document ids for requested domain.
+     */
+    replaceDocumentsAndWait(requestParameters: ReplaceDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Replace all documents in the specified domain with the provided documents.
+     * Replace documents, returns list of replaced document ids for requested domain.
+     * (alias to replaceDocumentsAndWait)
+     */
+    replaceDocuments(requestParameters: ReplaceDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
     /**
      * Remove all documents from the specified domain.
-     * Reset documents
+     * Remove domain
      */
-    resetDocumentsRaw(requestParameters: ResetDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
+    removeDomainRaw(requestParameters: RemoveDomain, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
     /**
      * Remove all documents from the specified domain.
-     * Reset documents
+     * Remove domain, returns batch id to track operation status.
      */
-    resetDocuments(requestParameters: ResetDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    removeDomainAsync(requestParameters: RemoveDomain, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    /**
+     * Remove all documents from the specified domain.
+     * Remove domain, returns list of removed document ids for requested domain.
+     */
+    removeDomainAndWait(requestParameters: RemoveDomain, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Remove all documents from the specified domain.
+     * Remove domain, returns list of removed document ids for requested domain.
+     * (alias to removeDomainAndWait)
+     */
+    removeDomain(requestParameters: RemoveDomain, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
     /**
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
@@ -151,17 +205,39 @@ export declare class DefaultApi extends runtime.BaseAPI {
     upsertDocumentsRaw(requestParameters: UpsertDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
     /**
      * Insert new documents or update existing ones based on the ID.
-     * Upsert documents
+     * Upsert documents, returns batch id to track operation status.
      */
-    upsertDocuments(requestParameters: UpsertDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    upsertDocumentsAsync(requestParameters: UpsertDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
     /**
-     * Upload and upsert files into the document system.
-     * Upsert files
+     * Insert new documents or update existing ones based on the ID.
+     * Upsert documents, returns list of upserted document ids for requested domain.
      */
-    upsertFilesRaw(requestParameters: UpsertFilesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
+    upsertDocumentsAndWait(requestParameters: UpsertDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
     /**
-     * Upload and upsert files into the document system.
-     * Upsert files
+     * Insert new documents or update existing ones based on the ID.
+     * Upsert documents, returns list of upserted document ids for requested domain.
+     * (alias to upsertDocumentsAndWait)
      */
-    upsertFiles(requestParameters: UpsertFilesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    upsertDocuments(requestParameters: UpsertDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file
+     */
+    upsertFileRaw(requestParameters: UpsertFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file, returns batch id to track operation status.
+     */
+    upsertFileAsync(requestParameters: UpsertFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file, returns list of upserted file ids for requested domain.
+     */
+    upsertFileAndWait(requestParameters: UpsertFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file, returns list of upserted file ids for requested domain.
+     * (alias to upsertFileAndWait)
+     */
+    upsertFile(requestParameters: UpsertFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
 }

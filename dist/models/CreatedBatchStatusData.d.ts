@@ -20,7 +20,7 @@ export interface CreatedBatchStatusData {
      * @type {string}
      * @memberof CreatedBatchStatusData
      */
-    batchId?: string;
+    batchId: string;
     /**
      *
      * @type {Array<string>}

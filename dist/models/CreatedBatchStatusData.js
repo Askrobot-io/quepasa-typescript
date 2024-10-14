@@ -31,7 +31,7 @@ function CreatedBatchStatusDataFromJSONTyped(json, ignoreDiscriminator) {
         return json;
     }
     return {
-        'batchId': json['batch_id'] == null ? undefined : json['batch_id'],
+        'batchId': json['batch_id'],
         'processedIds': json['processed_ids'] == null ? undefined : json['processed_ids'],
     };
 }

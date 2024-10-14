@@ -54,6 +54,33 @@ class DefaultApi extends runtime.BaseAPI {
         return await response.value();
     }
     /**
+     * Wait for status of a batch
+     */
+    async waitForBatch(createdBatchStatus, intervalValue = 10000, timeoutValue = 600000) {
+        return new Promise((resolve, reject) => {
+            let interval = setInterval(async () => {
+                try {
+                    let result = await this.getBatchStatus({ id: createdBatchStatus.data.batchId + "" });
+                    if (result.status === "Batch state: done") {
+                        clearTimeout(timeout);
+                        clearInterval(interval);
+                        resolve(result); // Resolve the promise with the result when batch is done
+                    }
+                }
+                catch (error) {
+                    clearTimeout(timeout);
+                    clearInterval(interval);
+                    reject(error); // Reject the promise if an error occurs
+                }
+            }, intervalValue);
+            let timeout = setTimeout(async () => {
+                clearTimeout(timeout);
+                clearInterval(interval);
+                reject("waitForBatch timeout");
+            }, timeoutValue);
+        });
+    }
+    /**
      * Retrieve details of a document by its domain and ID.
      * Get document details
      */
@@ -116,11 +143,31 @@ class DefaultApi extends runtime.BaseAPI {
     }
     /**
      * List all document IDs in the specified domain.
-     * List documents
+     * List documents, returns batch id to track operation status.
      */
-    async listDocuments(requestParameters, initOverrides) {
+    async listDocumentsAsync(requestParameters, initOverrides) {
         const response = await this.listDocumentsRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+    /**
+     * List all document IDs in the specified domain.
+     * List documents, returns list of document ids for requested domain.
+     */
+    async listDocumentsAndWait(requestParameters, initOverrides) {
+        const createdBatchStatus = await this.listDocumentsAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if (batchStatus['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+    /**
+     * List all document IDs in the specified domain.
+     * List documents, returns list of document ids for requested domain.
+     * (alias to listDocumentsAndWait)
+     */
+    async listDocuments(requestParameters, initOverrides) {
+        return await this.listDocumentsAndWait(requestParameters, initOverrides);
     }
     /**
      * Remove a specific document by its domain and ID.
@@ -152,11 +199,39 @@ class DefaultApi extends runtime.BaseAPI {
     }
     /**
      * Remove a specific document by its domain and ID.
-     * Remove document
+     * Remove document, returns batch id to track operation status.
      */
-    async removeDocument(requestParameters, initOverrides) {
+    async removeDocumentAsync(requestParameters, initOverrides) {
         const response = await this.removeDocumentRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+    /**
+     * Remove a specific document by its domain and ID.
+     * Remove document, returns list of removed document ids for requested domain.
+     */
+    async removeDocumentAndWait(requestParameters, initOverrides) {
+        const createdBatchStatus = await this.removeDocumentAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if (batchStatus['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+    /**
+     * Remove a specific document by its domain and ID.
+     * Remove document, returns list of removed document ids for requested domain.
+     * (alias to removeDocumentAndWait)
+     */
+    async removeDocument(requestParameters, initOverrides) {
+        return await this.removeDocumentAndWait(requestParameters, initOverrides);
+    }
+    /**
+     * Remove a specific file by its domain and ID.
+     * Remove file, returns list of removed document ids for requested domain.
+     * (alias to removeDocument)
+     */
+    async removeFile(requestParameters, initOverrides) {
+        return await this.removeDocument(requestParameters, initOverrides);
     }
     /**
      * Replace all documents in the specified domain with the provided documents.
@@ -166,8 +241,8 @@ class DefaultApi extends runtime.BaseAPI {
         if (requestParameters['domain'] == null) {
             throw new runtime.RequiredError('domain', 'Required parameter "domain" was null or undefined when calling replaceDocuments().');
         }
-        if (requestParameters['document'] == null) {
-            throw new runtime.RequiredError('document', 'Required parameter "document" was null or undefined when calling replaceDocuments().');
+        if (requestParameters['documents'] == null) {
+            throw new runtime.RequiredError('documents', 'Required parameter "document" was null or undefined when calling replaceDocuments().');
         }
         const queryParameters = {};
         const headerParameters = {};
@@ -184,25 +259,45 @@ class DefaultApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['document'].map(index_1.DocumentToJSON),
+            body: requestParameters['documents'].map(index_1.DocumentToJSON),
         }, initOverrides);
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.CreatedBatchStatusFromJSON)(jsonValue));
     }
     /**
      * Replace all documents in the specified domain with the provided documents.
-     * Replace documents
+     * Replace documents, returns batch id to track operation status.
      */
-    async replaceDocuments(requestParameters, initOverrides) {
+    async replaceDocumentsAsync(requestParameters, initOverrides) {
         const response = await this.replaceDocumentsRaw(requestParameters, initOverrides);
         return await response.value();
     }
     /**
-     * Remove all documents from the specified domain.
-     * Reset documents
+     * Replace all documents in the specified domain with the provided documents.
+     * Replace documents, returns list of replaced document ids for requested domain.
      */
-    async resetDocumentsRaw(requestParameters, initOverrides) {
+    async replaceDocumentsAndWait(requestParameters, initOverrides) {
+        const createdBatchStatus = await this.replaceDocumentsAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if (batchStatus['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+    /**
+     * Replace all documents in the specified domain with the provided documents.
+     * Replace documents, returns list of replaced document ids for requested domain.
+     * (alias to replaceDocumentsAndWait)
+     */
+    async replaceDocuments(requestParameters, initOverrides) {
+        return await this.replaceDocumentsAndWait(requestParameters, initOverrides);
+    }
+    /**
+     * Remove all documents from the specified domain.
+     * Remove domain
+     */
+    async removeDomainRaw(requestParameters, initOverrides) {
         if (requestParameters['domain'] == null) {
-            throw new runtime.RequiredError('domain', 'Required parameter "domain" was null or undefined when calling resetDocuments().');
+            throw new runtime.RequiredError('domain', 'Required parameter "domain" was null or undefined when calling removeDomain().');
         }
         const queryParameters = {};
         const headerParameters = {};
@@ -223,11 +318,31 @@ class DefaultApi extends runtime.BaseAPI {
     }
     /**
      * Remove all documents from the specified domain.
-     * Reset documents
+     * Remove domain, returns batch id to track operation status.
      */
-    async resetDocuments(requestParameters, initOverrides) {
-        const response = await this.resetDocumentsRaw(requestParameters, initOverrides);
+    async removeDomainAsync(requestParameters, initOverrides) {
+        const response = await this.removeDomainRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+    /**
+     * Remove all documents from the specified domain.
+     * Remove domain, returns list of removed document ids for requested domain.
+     */
+    async removeDomainAndWait(requestParameters, initOverrides) {
+        const createdBatchStatus = await this.removeDomainAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if (batchStatus['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+    /**
+     * Remove all documents from the specified domain.
+     * Remove domain, returns list of removed document ids for requested domain.
+     * (alias to removeDomainAndWait)
+     */
+    async removeDomain(requestParameters, initOverrides) {
+        return await this.removeDomainAndWait(requestParameters, initOverrides);
     }
     /**
      * This endpoint allows you to generate an answer based on your data.
@@ -342,8 +457,8 @@ class DefaultApi extends runtime.BaseAPI {
         if (requestParameters['domain'] == null) {
             throw new runtime.RequiredError('domain', 'Required parameter "domain" was null or undefined when calling upsertDocuments().');
         }
-        if (requestParameters['document'] == null) {
-            throw new runtime.RequiredError('document', 'Required parameter "document" was null or undefined when calling upsertDocuments().');
+        if (requestParameters['documents'] == null) {
+            throw new runtime.RequiredError('documents', 'Required parameter "document" was null or undefined when calling upsertDocuments().');
         }
         const queryParameters = {};
         const headerParameters = {};
@@ -360,23 +475,43 @@ class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: requestParameters['document'].map(index_1.DocumentToJSON),
+            body: requestParameters['documents'].map(index_1.DocumentToJSON),
         }, initOverrides);
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.CreatedBatchStatusFromJSON)(jsonValue));
     }
     /**
      * Insert new documents or update existing ones based on the ID.
-     * Upsert documents
+     * Upsert documents, returns batch id to track operation status.
      */
-    async upsertDocuments(requestParameters, initOverrides) {
+    async upsertDocumentsAsync(requestParameters, initOverrides) {
         const response = await this.upsertDocumentsRaw(requestParameters, initOverrides);
         return await response.value();
     }
     /**
-     * Upload and upsert files into the document system.
-     * Upsert files
+     * Insert new documents or update existing ones based on the ID.
+     * Upsert documents, returns list of upserted document ids for requested domain.
      */
-    async upsertFilesRaw(requestParameters, initOverrides) {
+    async upsertDocumentsAndWait(requestParameters, initOverrides) {
+        const createdBatchStatus = await this.upsertDocumentsAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if (batchStatus['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+    /**
+     * Insert new documents or update existing ones based on the ID.
+     * Upsert documents, returns list of upserted document ids for requested domain.
+     * (alias to upsertDocumentsAndWait)
+     */
+    async upsertDocuments(requestParameters, initOverrides) {
+        return await this.upsertDocumentsAndWait(requestParameters, initOverrides);
+    }
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file
+     */
+    async upsertFileRaw(requestParameters, initOverrides) {
         if (requestParameters['domain'] == null) {
             throw new runtime.RequiredError('domain', 'Required parameter "domain" was null or undefined when calling upsertFiles().');
         }
@@ -423,12 +558,32 @@ class DefaultApi extends runtime.BaseAPI {
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.CreatedBatchStatusFromJSON)(jsonValue));
     }
     /**
-     * Upload and upsert files into the document system.
-     * Upsert files
+     * Upload and upsert file into the document system.
+     * Upsert file, returns batch id to track operation status.
      */
-    async upsertFiles(requestParameters, initOverrides) {
-        const response = await this.upsertFilesRaw(requestParameters, initOverrides);
+    async upsertFileAsync(requestParameters, initOverrides) {
+        const response = await this.upsertFileRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file, returns list of upserted file ids for requested domain.
+     */
+    async upsertFileAndWait(requestParameters, initOverrides) {
+        const createdBatchStatus = await this.upsertFileAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if (batchStatus['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+    /**
+     * Upload and upsert file into the document system.
+     * Upsert file, returns list of upserted file ids for requested domain.
+     * (alias to upsertFileAndWait)
+     */
+    async upsertFile(requestParameters, initOverrides) {
+        return await this.upsertFileAndWait(requestParameters, initOverrides);
     }
 }
 exports.DefaultApi = DefaultApi;
