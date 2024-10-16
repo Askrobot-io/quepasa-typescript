@@ -318,6 +318,9 @@ When answering the question, use the following rules:
 - answer briefly in just a few sentences, strictly in accordance with the sources, and do not make any assumptions;
 - reference the source if you use it in the answer, e.g. [#1] or [#2][#4];
 - if there is no information on the question in the sources: say that you can't find the answer and ask the user to try to reformulate the question.
+
+Sources:
+{{SOURCES}}
     `.trim(),
 });
 ```
