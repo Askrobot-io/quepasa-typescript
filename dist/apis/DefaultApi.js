@@ -404,7 +404,7 @@ class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: (0, index_1.RetrieveAnswerRequestToJSON)(requestParameters),
+            body: (0, index_1.RetrieveChunksRequestToJSON)(requestParameters),
         }, initOverrides);
         return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.ChunksDetailFromJSON)(jsonValue));
     }

@@ -13,50 +13,39 @@
  * Do not edit the class manually.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.instanceOfRetrieveAnswerRequest = instanceOfRetrieveAnswerRequest;
-exports.RetrieveAnswerRequestFromJSON = RetrieveAnswerRequestFromJSON;
-exports.RetrieveAnswerRequestFromJSONTyped = RetrieveAnswerRequestFromJSONTyped;
-exports.RetrieveAnswerRequestToJSON = RetrieveAnswerRequestToJSON;
-const RetrieveRequestUserInfo_1 = require("./RetrieveRequestUserInfo");
+exports.instanceOfRetrieveChunksRequest = instanceOfRetrieveChunksRequest;
+exports.RetrieveChunksRequestFromJSON = RetrieveChunksRequestFromJSON;
+exports.RetrieveChunksRequestFromJSONTyped = RetrieveChunksRequestFromJSONTyped;
+exports.RetrieveChunksRequestToJSON = RetrieveChunksRequestToJSON;
 const RetrieveRelevanceWeights_1 = require("./RetrieveRelevanceWeights");
 /**
- * Check if a given object implements the RetrieveAnswerRequest interface.
+ * Check if a given object implements the RetrieveChunksRequest interface.
  */
-function instanceOfRetrieveAnswerRequest(value) {
+function instanceOfRetrieveChunksRequest(value) {
     return true;
 }
-function RetrieveAnswerRequestFromJSON(json) {
-    return RetrieveAnswerRequestFromJSONTyped(json, false);
+function RetrieveChunksRequestFromJSON(json) {
+    return RetrieveChunksRequestFromJSONTyped(json, false);
 }
-function RetrieveAnswerRequestFromJSONTyped(json, ignoreDiscriminator) {
+function RetrieveChunksRequestFromJSONTyped(json, ignoreDiscriminator) {
     if (json == null) {
         return json;
     }
     return {
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
-        'llm': json['llm'] == null ? undefined : json['llm'],
-        'prompt': json['prompt'] == null ? undefined : json['prompt'],
-        'answer_prompt_size': json['answer_prompt_size'] == null ? undefined : json['answer_prompt_size'],
-        'prompt_total_size': json['prompt_total_size'] == null ? undefined : json['prompt_total_size'],
         'document_relevance_weights': json['document_relevance_weights'] == null ? undefined : (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsFromJSON)(json['document_relevance_weights']),
         'chunk_relevance_weights': json['chunk_relevance_weights'] == null ? undefined : (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsFromJSON)(json['chunk_relevance_weights']),
-        'userInfo': json['user_info'] == null ? undefined : (0, RetrieveRequestUserInfo_1.RetrieveRequestUserInfoFromJSON)(json['user_info']),
     };
 }
-function RetrieveAnswerRequestToJSON(value) {
+function RetrieveChunksRequestToJSON(value) {
     if (value == null) {
         return value;
     }
     return {
         'question': value['question'],
         'domain': value['domain'],
-        'llm': value['llm'],
-        'prompt': value['prompt'],
-        'answer_prompt_size': value['answer_prompt_size'],
-        'prompt_total_size': value['prompt_total_size'],
         'document_relevance_weights': (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsToJSON)(value['document_relevance_weights']),
         'chunk_relevance_weights': (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsToJSON)(value['chunk_relevance_weights']),
-        'user_info': (0, RetrieveRequestUserInfo_1.RetrieveRequestUserInfoToJSON)(value['userInfo']),
     };
 }

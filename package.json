@@ -1,7 +1,7 @@
 {
   "name": "quepasa-ai",
-  "version": "1.0.7",
-  "description": "API for RAG retrieval, managing documents, files, and related operations including Telegram integration.",
+  "version": "1.0.8",
+  "description": "API for RAG retrieval, managing documents and files.",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc"

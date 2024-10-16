@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { AnswerDetail, BatchStatus, BatchStatusData, ChunksDetail, CreatedBatchStatus, Document, DocumentDetail, RetrieveAnswerRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
+import type { AnswerDetail, BatchStatus, BatchStatusData, ChunksDetail, CreatedBatchStatus, Document, DocumentDetail, RetrieveAnswerRequest, RetrieveChunksRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
 export interface GetBatchStatusRequest {
     id: string;
 }
@@ -176,12 +176,12 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    retrieveChunksRaw(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>>;
+    retrieveChunksRaw(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>>;
     /**
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    retrieveChunks(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail>;
+    retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail>;
     /**
      * Configure Telegram for notifications or integrations.
      * Setup Telegram integration

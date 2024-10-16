@@ -13,12 +13,20 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RetrieveAnswerRequestUserInfo } from './RetrieveAnswerRequestUserInfo';
+
+import type { RetrieveRequestUserInfo } from './RetrieveRequestUserInfo';
 import {
-    RetrieveAnswerRequestUserInfoFromJSON,
-    RetrieveAnswerRequestUserInfoFromJSONTyped,
-    RetrieveAnswerRequestUserInfoToJSON,
-} from './RetrieveAnswerRequestUserInfo';
+    RetrieveRequestUserInfoFromJSON,
+    RetrieveRequestUserInfoFromJSONTyped,
+    RetrieveRequestUserInfoToJSON,
+} from './RetrieveRequestUserInfo';
+
+import type { RetrieveRelevanceWeights } from './RetrieveRelevanceWeights';
+import {
+    RetrieveRelevanceWeightsFromJSON,
+    RetrieveRelevanceWeightsFromJSONTyped,
+    RetrieveRelevanceWeightsToJSON,
+} from './RetrieveRelevanceWeights';
 
 /**
  *
@@ -32,18 +40,82 @@ export interface RetrieveAnswerRequest {
      * @memberof RetrieveAnswerRequest
      */
     question: string;
+
     /**
      * The name of a group of documents.
      * @type {string|Array<string>}
      * @memberof RetrieveAnswerRequest
      */
     domain?: string | Array<string>;
+
     /**
-     *
-     * @type {RetrieveAnswerRequestUserInfo}
+     * This is the model that will generate answers to questions based on the retrieved search results.
+     * Options:
+     * - gpt-3.5-turbo-16k-0613
+     * - mistral:mistral-large-2402
+     * - anthropic:claude-3-5-sonnet-20240620
+     * - replicate:meta-llama-3-70b-instruct
+     * @type {string}
      * @memberof RetrieveAnswerRequest
      */
-    userInfo?: RetrieveAnswerRequestUserInfo;
+    llm?: string;
+
+    /**
+     * The prompt used for RAG, with placeholders like {{LANGUAGE}} for the language in which the question was asked, and {{SOURCES}} for listing the relevant chunks.
+     * For example
+     * ```
+     * You're a bot-assistant that answers the questions.
+     *
+     * When answering the question, use the following rules:
+     * - always answer in {{LANGUAGE}} language;
+     * - use ONLY the information from the sources below;
+     * - answer briefly in just a few sentences, strictly in accordance with the sources, and do not make any assumptions;
+     * - reference the source if you use it in the answer, e.g. [#1] or [#2][#4];
+     * - if there is no information on the question in the sources: say that you can't find the answer and ask the user to try to reformulate the question.
+     *
+     * Sources:
+     * {{SOURCES}}
+     * ```
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    prompt?: string;
+
+    /**
+     * The length of the response in tokens. This parameter defines the maximum number of tokens that the model can use to generate its answer.
+     * @type {number}
+     * @memberof RetrieveAnswerRequest
+     */
+    answer_prompt_size?: number;
+
+    /**
+     * The maximum length of the prompt in tokens. This sets the upper limit for how many tokens can be used for the combined input to the model, including the user's query and the retrieved document context.
+     * Default: 8110
+     * @type {number}
+     * @memberof RetrieveAnswerRequest
+     */
+    prompt_total_size?: number;
+
+    /**
+     * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
+     * @type {RetrieveRelevanceWeights}
+     * @memberof RetrieveAnswerRequest
+     */
+    document_relevance_weights?: RetrieveRelevanceWeights;
+
+    /**
+     * A hybrid ranking formula for document chunks, using the same two parameters as document_relevance_weights: text for full-text search and semantic for semantic search. This adjusts the relevance of different chunks of a document based on these weights.
+     * @type {RetrieveRelevanceWeights}
+     * @memberof RetrieveAnswerRequest
+     */
+    chunk_relevance_weights?: RetrieveRelevanceWeights;
+
+    /**
+     * User info to track requests.
+     * @type {RetrieveRequestUserInfo}
+     * @memberof RetrieveAnswerRequest
+     */
+    userInfo?: RetrieveRequestUserInfo;
 }
 
 /**
@@ -62,10 +134,15 @@ export function RetrieveAnswerRequestFromJSONTyped(json: any, ignoreDiscriminato
         return json;
     }
     return {
-
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
-        'userInfo': json['user_info'] == null ? undefined : RetrieveAnswerRequestUserInfoFromJSON(json['user_info']),
+        'llm': json['llm'] == null ? undefined : json['llm'],
+        'prompt': json['prompt'] == null ? undefined : json['prompt'],
+        'answer_prompt_size': json['answer_prompt_size'] == null ? undefined : json['answer_prompt_size'],
+        'prompt_total_size': json['prompt_total_size'] == null ? undefined : json['prompt_total_size'],
+        'document_relevance_weights': json['document_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['document_relevance_weights']),
+        'chunk_relevance_weights': json['chunk_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['chunk_relevance_weights']),
+        'userInfo': json['user_info'] == null ? undefined : RetrieveRequestUserInfoFromJSON(json['user_info']),
     };
 }
 
@@ -74,9 +151,14 @@ export function RetrieveAnswerRequestToJSON(value?: RetrieveAnswerRequest | null
         return value;
     }
     return {
-
         'question': value['question'],
         'domain': value['domain'],
-        'user_info': RetrieveAnswerRequestUserInfoToJSON(value['userInfo']),
+        'llm': value['llm'],
+        'prompt': value['prompt'],
+        'answer_prompt_size': value['answer_prompt_size'],
+        'prompt_total_size': value['prompt_total_size'],
+        'document_relevance_weights': RetrieveRelevanceWeightsToJSON(value['document_relevance_weights']),
+        'chunk_relevance_weights': RetrieveRelevanceWeightsToJSON(value['chunk_relevance_weights']),
+        'user_info': RetrieveRequestUserInfoToJSON(value['userInfo']),
     };
 }

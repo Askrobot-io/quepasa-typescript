@@ -25,6 +25,7 @@ import type {
   DocumentNotFound,
   OperationFailedStatus,
   RetrieveAnswerRequest,
+  RetrieveChunksRequest,
   SetupTelegramRequest,
   TelegramStatus,
 } from '../models/index';
@@ -47,6 +48,8 @@ import {
     OperationFailedStatusToJSON,
     RetrieveAnswerRequestFromJSON,
     RetrieveAnswerRequestToJSON,
+    RetrieveChunksRequestFromJSON,
+    RetrieveChunksRequestToJSON,
     SetupTelegramRequestFromJSON,
     SetupTelegramRequestToJSON,
     TelegramStatusFromJSON,
@@ -562,7 +565,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    async retrieveChunksRaw(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>> {
+    async retrieveChunksRaw(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ChunksDetail>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -582,7 +585,7 @@ export class DefaultApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RetrieveAnswerRequestToJSON(requestParameters),
+            body: RetrieveChunksRequestToJSON(requestParameters),
         }, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ChunksDetailFromJSON(jsonValue));
@@ -592,7 +595,7 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    async retrieveChunks(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail> {
+    async retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail> {
         const response = await this.retrieveChunksRaw(requestParameters, initOverrides);
         return await response.value();
     }
