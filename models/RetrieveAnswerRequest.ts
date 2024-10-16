@@ -33,6 +33,12 @@ export interface RetrieveAnswerRequest {
      */
     question: string;
     /**
+     * The name of a group of documents.
+     * @type {string|Array<string>}
+     * @memberof RetrieveAnswerRequest
+     */
+    domain?: string | Array<string>;
+    /**
      *
      * @type {RetrieveAnswerRequestUserInfo}
      * @memberof RetrieveAnswerRequest
@@ -58,6 +64,7 @@ export function RetrieveAnswerRequestFromJSONTyped(json: any, ignoreDiscriminato
     return {
 
         'question': json['question'],
+        'domain': json['domain'] == null ? undefined : json['domain'],
         'userInfo': json['user_info'] == null ? undefined : RetrieveAnswerRequestUserInfoFromJSON(json['user_info']),
     };
 }
@@ -69,6 +76,7 @@ export function RetrieveAnswerRequestToJSON(value?: RetrieveAnswerRequest | null
     return {
 
         'question': value['question'],
+        'domain': value['domain'],
         'user_info': RetrieveAnswerRequestUserInfoToJSON(value['userInfo']),
     };
 }

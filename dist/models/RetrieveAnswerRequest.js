@@ -33,6 +33,7 @@ function RetrieveAnswerRequestFromJSONTyped(json, ignoreDiscriminator) {
     }
     return {
         'question': json['question'],
+        'domain': json['domain'] == null ? undefined : json['domain'],
         'userInfo': json['user_info'] == null ? undefined : (0, RetrieveAnswerRequestUserInfo_1.RetrieveAnswerRequestUserInfoFromJSON)(json['user_info']),
     };
 }
@@ -42,6 +43,7 @@ function RetrieveAnswerRequestToJSON(value) {
     }
     return {
         'question': value['question'],
+        'domain': value['domain'],
         'user_info': (0, RetrieveAnswerRequestUserInfo_1.RetrieveAnswerRequestUserInfoToJSON)(value['userInfo']),
     };
 }

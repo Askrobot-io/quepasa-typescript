@@ -23,6 +23,12 @@ export interface RetrieveAnswerRequest {
      */
     question: string;
     /**
+     * The name of a group of documents.
+     * @type {string|Array<string>}
+     * @memberof RetrieveAnswerRequest
+     */
+    domain?: string | Array<string>;
+    /**
      *
      * @type {RetrieveAnswerRequestUserInfo}
      * @memberof RetrieveAnswerRequest
