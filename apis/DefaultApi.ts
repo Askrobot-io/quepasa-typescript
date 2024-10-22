@@ -16,13 +16,19 @@
 import * as runtime from '../runtime';
 import type {
   AnswerDetail,
+  AnswerDetailData,
   BatchStatus,
   BatchStatusData,
   ChunksDetail,
+  ChunksDetailDataInner,
   CreatedBatchStatus,
   Document,
   DocumentDetail,
+  DocumentDetailData,
   DocumentNotFound,
+  DomainDetail,
+  DomainDetailData,
+  DomainListDetail,
   OperationFailedStatus,
   RetrieveAnswerRequest,
   RetrieveChunksRequest,
@@ -44,6 +50,10 @@ import {
     DocumentDetailToJSON,
     DocumentNotFoundFromJSON,
     DocumentNotFoundToJSON,
+    DomainDetailFromJSON,
+    DomainDetailToJSON,
+    DomainListDetailFromJSON,
+    DomainListDetailToJSON,
     OperationFailedStatusFromJSON,
     OperationFailedStatusToJSON,
     RetrieveAnswerRequestFromJSON,
@@ -224,16 +234,20 @@ export class DefaultApi extends runtime.BaseAPI {
      * Retrieve details of a document by its domain and ID.
      * Get document details
      */
-    async getDocument(requestParameters: GetDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DocumentDetail> {
+    async getDocument(requestParameters: GetDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DocumentDetailData> {
         const response = await this.getDocumentRaw(requestParameters, initOverrides);
-        return await response.value();
+        let result = await response.value();
+        if ( result['data'] == null ) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data']
     }
 
     /**
      * List all document IDs in the specified domain.
      * List documents
      */
-    async listDocumentsRaw(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>> {
+    async listDocumentsRaw(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DomainDetail>> {
         if (requestParameters['domain'] == null) {
             throw new runtime.RequiredError(
                 'domain',
@@ -260,38 +274,60 @@ export class DefaultApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreatedBatchStatusFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DomainDetailFromJSON(jsonValue));
     }
 
     /**
      * List all document IDs in the specified domain.
-     * List documents, returns batch id to track operation status.
+     * List documents
      */
-    async listDocumentsAsync(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus> {
+    async listDocuments(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DomainDetailData> {
         const response = await this.listDocumentsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * List all document IDs in the specified domain.
-     * List documents, returns list of document ids for requested domain.
-     */
-    async listDocumentsAndWait(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData> {
-        const createdBatchStatus = await this.listDocumentsAsync(requestParameters, initOverrides);
-        const batchStatus = await this.waitForBatch(createdBatchStatus);
-        if ( batchStatus['data'] == null ) {
+        let result = await response.value();
+        if ( result['data'] == null ) {
             throw new Error('Response returned an "data" that was null or undefined.');
         }
-        return batchStatus['data'];
+        return result['data'];
     }
 
     /**
-     * List all document IDs in the specified domain.
-     * List documents, returns list of document ids for requested domain.
-     * (alias to listDocumentsAndWait)
+     * List all document IDs in all available domains.
+     * List all documents
      */
-    async listDocuments(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData> {
-        return await this.listDocumentsAndWait(requestParameters, initOverrides);
+    async listAllDocumentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DomainListDetail>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/upload/data/documents`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DomainListDetailFromJSON(jsonValue));
+    }
+
+    /**
+     * List all document IDs in all available domains.
+     * List all documents
+     */
+    async listAllDocuments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DomainDetailData>> {
+        const response = await this.listAllDocumentsRaw(initOverrides);
+        let result = await response.value();
+        if ( result['data'] == null ) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
 
     /**
@@ -556,9 +592,13 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
      */
-    async retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetail> {
+    async retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetailData> {
         const response = await this.retrieveAnswerRaw(requestParameters, initOverrides);
-        return await response.value();
+        let result = await response.value();
+        if ( result['data'] == null ) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
 
     /**
@@ -595,9 +635,13 @@ export class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    async retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail> {
+    async retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChunksDetailDataInner>> {
         const response = await this.retrieveChunksRaw(requestParameters, initOverrides);
-        return await response.value();
+        let result = await response.value();
+        if ( result['data'] == null ) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
 
     /**

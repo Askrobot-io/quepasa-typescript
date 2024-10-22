@@ -1,6 +1,6 @@
 {
   "name": "quepasa-ai",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "API for RAG retrieval, managing documents and files.",
   "main": "./dist/index.js",
   "scripts": {

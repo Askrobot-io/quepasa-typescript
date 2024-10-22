@@ -214,6 +214,15 @@ let results = await quepasa.listDocuments({
 });
 ```
 
+### List all documents
+List all document IDs in all available domains.
+
+```typescript
+let results = await quepasa.listAllDocuments({
+    domain: domain,
+});
+```
+
 ### Delete document or file
 Remove a specific document by its domain and ID.
 
@@ -264,7 +273,6 @@ Each of the following methods that return a batch ID has the same parameters as 
 - upsertDocumentsAsync
 - replaceDocumentsAsync
 - upsertFileAsync
-- listDocumentsAsync
 - removeDocumentAsync
 - removeDomainAsync
 

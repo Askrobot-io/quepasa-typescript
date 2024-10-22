@@ -119,7 +119,11 @@ class DefaultApi extends runtime.BaseAPI {
      */
     async getDocument(requestParameters, initOverrides) {
         const response = await this.getDocumentRaw(requestParameters, initOverrides);
-        return await response.value();
+        let result = await response.value();
+        if (result['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
     /**
      * List all document IDs in the specified domain.
@@ -144,35 +148,53 @@ class DefaultApi extends runtime.BaseAPI {
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
-        return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.CreatedBatchStatusFromJSON)(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.DomainDetailFromJSON)(jsonValue));
     }
     /**
      * List all document IDs in the specified domain.
-     * List documents, returns batch id to track operation status.
-     */
-    async listDocumentsAsync(requestParameters, initOverrides) {
-        const response = await this.listDocumentsRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-    /**
-     * List all document IDs in the specified domain.
-     * List documents, returns list of document ids for requested domain.
-     */
-    async listDocumentsAndWait(requestParameters, initOverrides) {
-        const createdBatchStatus = await this.listDocumentsAsync(requestParameters, initOverrides);
-        const batchStatus = await this.waitForBatch(createdBatchStatus);
-        if (batchStatus['data'] == null) {
-            throw new Error('Response returned an "data" that was null or undefined.');
-        }
-        return batchStatus['data'];
-    }
-    /**
-     * List all document IDs in the specified domain.
-     * List documents, returns list of document ids for requested domain.
-     * (alias to listDocumentsAndWait)
+     * List documents
      */
     async listDocuments(requestParameters, initOverrides) {
-        return await this.listDocumentsAndWait(requestParameters, initOverrides);
+        const response = await this.listDocumentsRaw(requestParameters, initOverrides);
+        let result = await response.value();
+        if (result['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
+    }
+    /**
+     * List all document IDs in all available domains.
+     * List all documents
+     */
+    async listAllDocumentsRaw(initOverrides) {
+        const queryParameters = {};
+        const headerParameters = {};
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/upload/data/documents`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+        return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.DomainListDetailFromJSON)(jsonValue));
+    }
+    /**
+     * List all document IDs in all available domains.
+     * List all documents
+     */
+    async listAllDocuments(initOverrides) {
+        const response = await this.listAllDocumentsRaw(initOverrides);
+        let result = await response.value();
+        if (result['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
     /**
      * Remove a specific document by its domain and ID.
@@ -382,7 +404,11 @@ class DefaultApi extends runtime.BaseAPI {
      */
     async retrieveAnswer(requestParameters, initOverrides) {
         const response = await this.retrieveAnswerRaw(requestParameters, initOverrides);
-        return await response.value();
+        let result = await response.value();
+        if (result['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
     /**
      * This endpoint allows you to perform a search on your data.
@@ -414,7 +440,11 @@ class DefaultApi extends runtime.BaseAPI {
      */
     async retrieveChunks(requestParameters, initOverrides) {
         const response = await this.retrieveChunksRaw(requestParameters, initOverrides);
-        return await response.value();
+        let result = await response.value();
+        if (result['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
     }
     /**
      * Configure Telegram for notifications or integrations.

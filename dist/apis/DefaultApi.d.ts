@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { AnswerDetail, BatchStatus, BatchStatusData, ChunksDetail, CreatedBatchStatus, Document, DocumentDetail, RetrieveAnswerRequest, RetrieveChunksRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
+import type { AnswerDetail, AnswerDetailData, BatchStatus, BatchStatusData, ChunksDetail, ChunksDetailDataInner, CreatedBatchStatus, Document, DocumentDetail, DocumentDetailData, DomainDetail, DomainDetailData, DomainListDetail, RetrieveAnswerRequest, RetrieveChunksRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
 export interface GetBatchStatusRequest {
     id: string;
 }
@@ -71,28 +71,27 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * Retrieve details of a document by its domain and ID.
      * Get document details
      */
-    getDocument(requestParameters: GetDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DocumentDetail>;
+    getDocument(requestParameters: GetDocumentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DocumentDetailData>;
     /**
      * List all document IDs in the specified domain.
      * List documents
      */
-    listDocumentsRaw(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
+    listDocumentsRaw(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DomainDetail>>;
     /**
      * List all document IDs in the specified domain.
-     * List documents, returns batch id to track operation status.
+     * List documents
      */
-    listDocumentsAsync(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    listDocuments(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DomainDetailData>;
     /**
-     * List all document IDs in the specified domain.
-     * List documents, returns list of document ids for requested domain.
+     * List all document IDs in all available domains.
+     * List all documents
      */
-    listDocumentsAndWait(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    listAllDocumentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DomainListDetail>>;
     /**
-     * List all document IDs in the specified domain.
-     * List documents, returns list of document ids for requested domain.
-     * (alias to listDocumentsAndWait)
+     * List all document IDs in all available domains.
+     * List all documents
      */
-    listDocuments(requestParameters: ListDocumentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    listAllDocuments(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<DomainDetailData>>;
     /**
      * Remove a specific document by its domain and ID.
      * Remove document
@@ -171,7 +170,7 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to generate an answer based on your data.
      * Retrieve answers or search data
      */
-    retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetail>;
+    retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetailData>;
     /**
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
@@ -181,7 +180,7 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */
-    retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ChunksDetail>;
+    retrieveChunks(requestParameters: RetrieveChunksRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ChunksDetailDataInner>>;
     /**
      * Configure Telegram for notifications or integrations.
      * Setup Telegram integration
