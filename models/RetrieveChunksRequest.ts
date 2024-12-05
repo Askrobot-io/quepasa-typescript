@@ -58,10 +58,10 @@ export interface RetrieveChunksRequest {
     /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
      *
-     * @type {RetrieveRelevanceWeights}
+     * @type {RetrieveFormulaRelevanceWeights}
      * @memberof RetrieveChunksRequest
      */
-    relevance_weights?: RetrieveRelevanceWeights;
+    relevance_weights?: RetrieveFormulaRelevanceWeights;
     /**
      *
      * @type {RetrieveRelevanceWeights}

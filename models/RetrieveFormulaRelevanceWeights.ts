@@ -50,8 +50,8 @@ export function RetrieveFormulaRelevanceWeightsFromJSONTyped(json: any, ignoreDi
     }
     return {
 
-        'text': json['text'] == null ? undefined : json['text'],
-        'semantic': json['semantic'] == null ? undefined : json['semantic'],
+        'document': json['document'] == null ? undefined : json['document'],
+        'chunk': json['chunk'] == null ? undefined : json['chunk'],
     };
 }
 
@@ -61,7 +61,7 @@ export function RetrieveFormulaRelevanceWeightsToJSON(value?: RetrieveFormulaRel
     }
     return {
 
-        'text': value['text'],
-        'semantic': value['semantic'],
+        'document': value['document'],
+        'chunk': value['chunk'],
     };
 }
