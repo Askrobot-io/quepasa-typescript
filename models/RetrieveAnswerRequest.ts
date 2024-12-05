@@ -56,6 +56,13 @@ export interface RetrieveAnswerRequest {
     domain?: string | Array<string>;
 
     /**
+     * (Experimental) Specifies the type of chunk. Can be "text" for raw text chunks, "summary" for chunks that are summaries of raw text, or "all" to include both types.
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    kind?: string;
+
+    /**
      * This is the model that will generate answers to questions based on the retrieved search results.
      * Options:
      * - gpt-3.5-turbo-16k-0613
@@ -176,6 +183,7 @@ export function RetrieveAnswerRequestFromJSONTyped(json: any, ignoreDiscriminato
     return {
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
+        'kind': json['kind'] == null ? undefined : json['kind'],
         'llm': json['llm'] == null ? undefined : json['llm'],
         'prompt': json['prompt'] == null ? undefined : json['prompt'],
         'answer_prompt_size': json['answer_prompt_size'] == null ? undefined : json['answer_prompt_size'],
@@ -197,6 +205,7 @@ export function RetrieveAnswerRequestToJSON(value?: RetrieveAnswerRequest | null
     return {
         'question': value['question'],
         'domain': value['domain'],
+        'kind': value['kind'],
         'llm': value['llm'],
         'prompt': value['prompt'],
         'answer_prompt_size': value['answer_prompt_size'],

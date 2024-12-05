@@ -45,6 +45,12 @@ export interface SetupTelegramRequest {
      */
     domain?: string;
     /**
+     * (Experimental) Specifies the type of chunk. Can be "text" for raw text chunks, "summary" for chunks that are summaries of raw text, or "all" to include both types.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    kind?: string;
+    /**
      * (Optional) This is the model that will generate answers to questions based on the retrieved search results.
      * @type {string}
      * @memberof SetupTelegramRequest
@@ -84,6 +90,7 @@ export function SetupTelegramRequestFromJSONTyped(json: any, ignoreDiscriminator
         'token': json['token'] == null ? undefined : json['token'],
         'commands': json['commands'] == null ? undefined : SetupTelegramRequestCommandsFromJSON(json['commands']),
         'domain': json['domain'] == null ? undefined : json['domain'],
+        'kind': json['kind'] == null ? undefined : json['kind'],
         'llm': json['llm'] == null ? undefined : json['llm'],
         'prompt': json['prompt'] == null ? undefined : json['prompt'],
         'userNames': json['user_names'] == null ? undefined : json['user_names'],
@@ -99,6 +106,7 @@ export function SetupTelegramRequestToJSON(value?: SetupTelegramRequest | null):
         'token': value['token'],
         'commands': SetupTelegramRequestCommandsToJSON(value['commands']),
         'domain': value['domain'],
+        'kind': value['kind'],
         'llm': value['llm'],
         'prompt': value['prompt'],
         'user_names': value['userNames'],

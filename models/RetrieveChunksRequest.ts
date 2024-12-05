@@ -56,6 +56,13 @@ export interface RetrieveChunksRequest {
     domain?: string | Array<string>;
 
     /**
+     * (Experimental) Specifies the type of chunk. Can be "text" for raw text chunks, "summary" for chunks that are summaries of raw text, or "all" to include both types.
+     * @type {string}
+     * @memberof RetrieveChunksRequest
+     */
+    kind?: string;
+
+    /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
      *
      * @type {RetrieveFormulaRelevanceWeights}
@@ -126,6 +133,7 @@ export function RetrieveChunksRequestFromJSONTyped(json: any, ignoreDiscriminato
     return {
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
+        'kind': json['kind'] == null ? undefined : json['kind'],
         'relevance_weights': json['relevance_weights'] == null ? undefined : RetrieveFormulaRelevanceWeightsFromJSON(json['relevance_weights']),
         'document_relevance_weights': json['document_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['document_relevance_weights']),
         'chunk_relevance_weights': json['chunk_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['chunk_relevance_weights']),
@@ -143,6 +151,7 @@ export function RetrieveChunksRequestToJSON(value?: RetrieveChunksRequest | null
     return {
         'question': value['question'],
         'domain': value['domain'],
+        'kind': value['kind'],
         'relevance_weights': RetrieveFormulaRelevanceWeightsToJSON(value['relevance_weights']),
         'document_relevance_weights': RetrieveRelevanceWeightsToJSON(value['document_relevance_weights']),
         'chunk_relevance_weights': RetrieveRelevanceWeightsToJSON(value['chunk_relevance_weights']),
