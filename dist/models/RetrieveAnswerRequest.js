@@ -36,6 +36,7 @@ function RetrieveAnswerRequestFromJSONTyped(json, ignoreDiscriminator) {
     return {
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
+        'kind': json['kind'] == null ? undefined : json['kind'],
         'llm': json['llm'] == null ? undefined : json['llm'],
         'prompt': json['prompt'] == null ? undefined : json['prompt'],
         'answer_prompt_size': json['answer_prompt_size'] == null ? undefined : json['answer_prompt_size'],
@@ -56,6 +57,7 @@ function RetrieveAnswerRequestToJSON(value) {
     return {
         'question': value['question'],
         'domain': value['domain'],
+        'kind': value['kind'],
         'llm': value['llm'],
         'prompt': value['prompt'],
         'answer_prompt_size': value['answer_prompt_size'],

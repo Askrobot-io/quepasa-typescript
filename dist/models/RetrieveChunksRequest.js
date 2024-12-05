@@ -36,6 +36,7 @@ function RetrieveChunksRequestFromJSONTyped(json, ignoreDiscriminator) {
     return {
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
+        'kind': json['kind'] == null ? undefined : json['kind'],
         'relevance_weights': json['relevance_weights'] == null ? undefined : (0, RetrieveFormulaRelevanceWeights_1.RetrieveFormulaRelevanceWeightsFromJSON)(json['relevance_weights']),
         'document_relevance_weights': json['document_relevance_weights'] == null ? undefined : (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsFromJSON)(json['document_relevance_weights']),
         'chunk_relevance_weights': json['chunk_relevance_weights'] == null ? undefined : (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsFromJSON)(json['chunk_relevance_weights']),
@@ -52,6 +53,7 @@ function RetrieveChunksRequestToJSON(value) {
     return {
         'question': value['question'],
         'domain': value['domain'],
+        'kind': value['kind'],
         'relevance_weights': (0, RetrieveFormulaRelevanceWeights_1.RetrieveFormulaRelevanceWeightsToJSON)(value['relevance_weights']),
         'document_relevance_weights': (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsToJSON)(value['document_relevance_weights']),
         'chunk_relevance_weights': (0, RetrieveRelevanceWeights_1.RetrieveRelevanceWeightsToJSON)(value['chunk_relevance_weights']),

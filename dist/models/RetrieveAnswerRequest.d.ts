@@ -31,6 +31,12 @@ export interface RetrieveAnswerRequest {
      */
     domain?: string | Array<string>;
     /**
+     * (Experimental) Specifies the type of chunk. Can be "text" for raw text chunks, "summary" for chunks that are summaries of raw text, or "all" to include both types.
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    kind?: string;
+    /**
      * This is the model that will generate answers to questions based on the retrieved search results.
      * Options:
      * - gpt-3.5-turbo-16k-0613

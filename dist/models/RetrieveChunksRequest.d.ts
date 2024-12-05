@@ -31,6 +31,12 @@ export interface RetrieveChunksRequest {
      */
     domain?: string | Array<string>;
     /**
+     * (Experimental) Specifies the type of chunk. Can be "text" for raw text chunks, "summary" for chunks that are summaries of raw text, or "all" to include both types.
+     * @type {string}
+     * @memberof RetrieveChunksRequest
+     */
+    kind?: string;
+    /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
      *
      * @type {RetrieveFormulaRelevanceWeights}

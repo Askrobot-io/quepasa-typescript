@@ -35,6 +35,12 @@ export interface SetupTelegramRequest {
      */
     domain?: string;
     /**
+     * (Experimental) Specifies the type of chunk. Can be "text" for raw text chunks, "summary" for chunks that are summaries of raw text, or "all" to include both types.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    kind?: string;
+    /**
      * (Optional) This is the model that will generate answers to questions based on the retrieved search results.
      * @type {string}
      * @memberof SetupTelegramRequest
