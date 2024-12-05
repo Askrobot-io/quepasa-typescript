@@ -38,6 +38,30 @@ export interface SetupTelegramRequest {
      * @memberof SetupTelegramRequest
      */
     commands?: SetupTelegramRequestCommands;
+    /**
+     * (Optional) The name of a group of documents.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    domain?: string;
+    /**
+     * (Optional) This is the model that will generate answers to questions based on the retrieved search results.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    llm?: string;
+    /**
+     * (Optional) The prompt used for RAG, with placeholders like {{LANGUAGE}} for the language in which the question was asked, and {{SOURCES}} for listing the relevant chunks.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    prompt?: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SetupTelegramRequest
+     */
+    userNames?: Array<string>;
 }
 
 /**
@@ -59,6 +83,10 @@ export function SetupTelegramRequestFromJSONTyped(json: any, ignoreDiscriminator
         
         'token': json['token'] == null ? undefined : json['token'],
         'commands': json['commands'] == null ? undefined : SetupTelegramRequestCommandsFromJSON(json['commands']),
+        'domain': json['domain'] == null ? undefined : json['domain'],
+        'llm': json['llm'] == null ? undefined : json['llm'],
+        'prompt': json['prompt'] == null ? undefined : json['prompt'],
+        'userNames': json['user_names'] == null ? undefined : json['user_names'],
     };
 }
 
@@ -70,6 +98,10 @@ export function SetupTelegramRequestToJSON(value?: SetupTelegramRequest | null):
         
         'token': value['token'],
         'commands': SetupTelegramRequestCommandsToJSON(value['commands']),
+        'domain': value['domain'],
+        'llm': value['llm'],
+        'prompt': value['prompt'],
+        'user_names': value['userNames'],
     };
 }
 

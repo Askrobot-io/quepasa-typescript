@@ -14,12 +14,26 @@
 
 import { mapValues } from '../runtime';
 
+import type { RetrieveRequestUserInfo } from './RetrieveRequestUserInfo';
+import {
+    RetrieveRequestUserInfoFromJSON,
+    RetrieveRequestUserInfoFromJSONTyped,
+    RetrieveRequestUserInfoToJSON,
+} from './RetrieveRequestUserInfo';
+
 import type { RetrieveRelevanceWeights } from './RetrieveRelevanceWeights';
 import {
     RetrieveRelevanceWeightsFromJSON,
     RetrieveRelevanceWeightsFromJSONTyped,
     RetrieveRelevanceWeightsToJSON,
 } from './RetrieveRelevanceWeights';
+
+import type { RetrieveFormulaRelevanceWeights } from './RetrieveFormulaRelevanceWeights';
+import {
+    RetrieveFormulaRelevanceWeightsFromJSON,
+    RetrieveFormulaRelevanceWeightsFromJSONTyped,
+    RetrieveFormulaRelevanceWeightsToJSON,
+} from './RetrieveFormulaRelevanceWeights';
 
 /**
  *
@@ -43,17 +57,55 @@ export interface RetrieveChunksRequest {
 
     /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
+     *
+     * @type {RetrieveRelevanceWeights}
+     * @memberof RetrieveChunksRequest
+     */
+    relevance_weights?: RetrieveRelevanceWeights;
+    /**
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveChunksRequest
      */
     document_relevance_weights?: RetrieveRelevanceWeights;
-
     /**
-     * A hybrid ranking formula for document chunks, using the same two parameters as document_relevance_weights: text for full-text search and semantic for semantic search. This adjusts the relevance of different chunks of a document based on these weights.
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveChunksRequest
      */
     chunk_relevance_weights?: RetrieveRelevanceWeights;
+
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder both documents and chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder documents based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    document_reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    chunk_reranker_prompt?: string;
+
+    /**
+     * User info to track requests.
+     * @type {RetrieveRequestUserInfo}
+     * @memberof RetrieveAnswerRequest
+     */
+    userInfo?: RetrieveRequestUserInfo;
 }
 
 /**
@@ -74,8 +126,13 @@ export function RetrieveChunksRequestFromJSONTyped(json: any, ignoreDiscriminato
     return {
         'question': json['question'],
         'domain': json['domain'] == null ? undefined : json['domain'],
+        'relevance_weights': json['relevance_weights'] == null ? undefined : RetrieveFormulaRelevanceWeightsFromJSON(json['relevance_weights']),
         'document_relevance_weights': json['document_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['document_relevance_weights']),
         'chunk_relevance_weights': json['chunk_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['chunk_relevance_weights']),
+        'reranker_prompt': json['reranker_prompt'] == null ? undefined : json['reranker_prompt'],
+        'document_reranker_prompt': json['document_reranker_prompt'] == null ? undefined : json['document_reranker_prompt'],
+        'chunk_reranker_prompt': json['chunk_reranker_prompt'] == null ? undefined : json['chunk_reranker_prompt'],
+        'userInfo': json['user_info'] == null ? undefined : RetrieveRequestUserInfoFromJSON(json['user_info']),
     };
 }
 
@@ -86,7 +143,12 @@ export function RetrieveChunksRequestToJSON(value?: RetrieveChunksRequest | null
     return {
         'question': value['question'],
         'domain': value['domain'],
+        'relevance_weights': RetrieveFormulaRelevanceWeightsToJSON(value['relevance_weights']),
         'document_relevance_weights': RetrieveRelevanceWeightsToJSON(value['document_relevance_weights']),
         'chunk_relevance_weights': RetrieveRelevanceWeightsToJSON(value['chunk_relevance_weights']),
+        'reranker_prompt': value['reranker_prompt'],
+        'document_reranker_prompt': value['document_reranker_prompt'],
+        'chunk_reranker_prompt': value['chunk_reranker_prompt'],
+        'user_info': RetrieveRequestUserInfoToJSON(value['userInfo']),
     };
 }

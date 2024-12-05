@@ -28,6 +28,12 @@ import {
 export interface BatchStatus {
     /**
      * Status of the batch (e.g., "uploaded", "backlog", "in_progress", "done").
+     * Possible values:
+     * - Batch state: uploaded
+     * - Batch state: backlog
+     * - Batch state: in_progress
+     * - Batch state: done
+     * 
      * @type {string}
      * @memberof BatchStatus
      */

@@ -108,6 +108,11 @@ export interface UpsertFileRequest {
     language?: string;
 }
 
+export interface UpsertUrlsRequest {
+    domain: string;
+    urls: Array<string>;
+}
+
 /**
  *
  */
@@ -855,4 +860,78 @@ export class DefaultApi extends runtime.BaseAPI {
         return await this.upsertFileAndWait(requestParameters, initOverrides);
     }
 
+    /**
+     * Upload and upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls
+     */
+    async upsertUrlsRaw(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>> {
+        if (requestParameters['domain'] == null) {
+            throw new runtime.RequiredError(
+                'domain',
+                'Required parameter "domain" was null or undefined when calling upsertUrls().'
+            );
+        }
+
+        if (requestParameters['urls'] == null) {
+            throw new runtime.RequiredError(
+                'urls',
+                'Required parameter "urls" was null or undefined when calling upsertUrls().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/upload/data/urls/{domain}`.replace(`{${"domain"}}`, encodeURIComponent(String(requestParameters['domain']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['urls'],
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreatedBatchStatusFromJSON(jsonValue));
+    }
+
+    /**
+     * Upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls, returns batch id to track operation status.
+     */
+    async upsertUrlsAsync(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus> {
+        const response = await this.upsertUrlsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls, returns list of upserted file ids for requested domain.
+     */
+    async upsertUrlsAndWait(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData> {
+        const createdBatchStatus = await this.upsertUrlsAsync(requestParameters, initOverrides);
+        const batchStatus = await this.waitForBatch(createdBatchStatus);
+        if ( batchStatus['data'] == null ) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return batchStatus['data'];
+    }
+
+    /**
+     * Upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls, returns list of upserted file ids for requested domain.
+     * (alias to upsertUrlsAndWait)
+     */
+    async upsertUrls(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData> {
+        return await this.upsertUrlsAndWait(requestParameters, initOverrides);
+    }
 }

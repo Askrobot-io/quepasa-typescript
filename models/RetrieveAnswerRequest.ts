@@ -28,6 +28,13 @@ import {
     RetrieveRelevanceWeightsToJSON,
 } from './RetrieveRelevanceWeights';
 
+import type { RetrieveFormulaRelevanceWeights } from './RetrieveFormulaRelevanceWeights';
+import {
+    RetrieveFormulaRelevanceWeightsFromJSON,
+    RetrieveFormulaRelevanceWeightsFromJSONTyped,
+    RetrieveFormulaRelevanceWeightsToJSON,
+} from './RetrieveFormulaRelevanceWeights';
+
 /**
  *
  * @export
@@ -55,6 +62,7 @@ export interface RetrieveAnswerRequest {
      * - mistral:mistral-large-2402
      * - anthropic:claude-3-5-sonnet-20240620
      * - replicate:meta-llama-3-70b-instruct
+     *
      * @type {string}
      * @memberof RetrieveAnswerRequest
      */
@@ -63,7 +71,7 @@ export interface RetrieveAnswerRequest {
     /**
      * The prompt used for RAG, with placeholders like {{LANGUAGE}} for the language in which the question was asked, and {{SOURCES}} for listing the relevant chunks.
      * For example
-     * ```
+     * ```plaintext
      * You're a bot-assistant that answers the questions.
      *
      * When answering the question, use the following rules:
@@ -76,6 +84,7 @@ export interface RetrieveAnswerRequest {
      * Sources:
      * {{SOURCES}}
      * ```
+     *
      * @type {string}
      * @memberof RetrieveAnswerRequest
      */
@@ -98,17 +107,48 @@ export interface RetrieveAnswerRequest {
 
     /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
+     *
+     * @type {RetrieveFormulaRelevanceWeights}
+     * @memberof RetrieveAnswerRequest
+     */
+    relevance_weights?: RetrieveFormulaRelevanceWeights;
+    /**
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveAnswerRequest
      */
     document_relevance_weights?: RetrieveRelevanceWeights;
-
     /**
-     * A hybrid ranking formula for document chunks, using the same two parameters as document_relevance_weights: text for full-text search and semantic for semantic search. This adjusts the relevance of different chunks of a document based on these weights.
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveAnswerRequest
      */
     chunk_relevance_weights?: RetrieveRelevanceWeights;
+
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder both documents and chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder documents based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    document_reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    chunk_reranker_prompt?: string;
 
     /**
      * User info to track requests.
@@ -140,8 +180,12 @@ export function RetrieveAnswerRequestFromJSONTyped(json: any, ignoreDiscriminato
         'prompt': json['prompt'] == null ? undefined : json['prompt'],
         'answer_prompt_size': json['answer_prompt_size'] == null ? undefined : json['answer_prompt_size'],
         'prompt_total_size': json['prompt_total_size'] == null ? undefined : json['prompt_total_size'],
+        'relevance_weights': json['relevance_weights'] == null ? undefined : RetrieveFormulaRelevanceWeightsFromJSON(json['relevance_weights']),
         'document_relevance_weights': json['document_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['document_relevance_weights']),
         'chunk_relevance_weights': json['chunk_relevance_weights'] == null ? undefined : RetrieveRelevanceWeightsFromJSON(json['chunk_relevance_weights']),
+        'reranker_prompt': json['reranker_prompt'] == null ? undefined : json['reranker_prompt'],
+        'document_reranker_prompt': json['document_reranker_prompt'] == null ? undefined : json['document_reranker_prompt'],
+        'chunk_reranker_prompt': json['chunk_reranker_prompt'] == null ? undefined : json['chunk_reranker_prompt'],
         'userInfo': json['user_info'] == null ? undefined : RetrieveRequestUserInfoFromJSON(json['user_info']),
     };
 }
@@ -157,8 +201,12 @@ export function RetrieveAnswerRequestToJSON(value?: RetrieveAnswerRequest | null
         'prompt': value['prompt'],
         'answer_prompt_size': value['answer_prompt_size'],
         'prompt_total_size': value['prompt_total_size'],
+        'relevance_weights': RetrieveFormulaRelevanceWeightsToJSON(value['relevance_weights']),
         'document_relevance_weights': RetrieveRelevanceWeightsToJSON(value['document_relevance_weights']),
         'chunk_relevance_weights': RetrieveRelevanceWeightsToJSON(value['chunk_relevance_weights']),
+        'reranker_prompt': value['reranker_prompt'],
+        'document_reranker_prompt': value['document_reranker_prompt'],
+        'chunk_reranker_prompt': value['chunk_reranker_prompt'],
         'user_info': RetrieveRequestUserInfoToJSON(value['userInfo']),
     };
 }
