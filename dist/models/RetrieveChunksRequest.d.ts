@@ -9,7 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import type { RetrieveRequestUserInfo } from './RetrieveRequestUserInfo';
 import type { RetrieveRelevanceWeights } from './RetrieveRelevanceWeights';
+import type { RetrieveFormulaRelevanceWeights } from './RetrieveFormulaRelevanceWeights';
 /**
  *
  * @export
@@ -30,16 +32,53 @@ export interface RetrieveChunksRequest {
     domain?: string | Array<string>;
     /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
+     *
+     * @type {RetrieveFormulaRelevanceWeights}
+     * @memberof RetrieveChunksRequest
+     */
+    relevance_weights?: RetrieveFormulaRelevanceWeights;
+    /**
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveChunksRequest
      */
     document_relevance_weights?: RetrieveRelevanceWeights;
     /**
-     * A hybrid ranking formula for document chunks, using the same two parameters as document_relevance_weights: text for full-text search and semantic for semantic search. This adjusts the relevance of different chunks of a document based on these weights.
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveChunksRequest
      */
     chunk_relevance_weights?: RetrieveRelevanceWeights;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder both documents and chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder documents based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    document_reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    chunk_reranker_prompt?: string;
+    /**
+     * User info to track requests.
+     * @type {RetrieveRequestUserInfo}
+     * @memberof RetrieveAnswerRequest
+     */
+    userInfo?: RetrieveRequestUserInfo;
 }
 /**
  * Check if a given object implements the RetrieveChunksRequest interface.

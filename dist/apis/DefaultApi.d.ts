@@ -44,6 +44,10 @@ export interface UpsertFileRequest {
     file: Blob;
     language?: string;
 }
+export interface UpsertUrlsRequest {
+    domain: string;
+    urls: Array<string>;
+}
 /**
  *
  */
@@ -233,4 +237,25 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * (alias to upsertFileAndWait)
      */
     upsertFile(requestParameters: UpsertFileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Upload and upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls
+     */
+    upsertUrlsRaw(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreatedBatchStatus>>;
+    /**
+     * Upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls, returns batch id to track operation status.
+     */
+    upsertUrlsAsync(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreatedBatchStatus>;
+    /**
+     * Upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls, returns list of upserted file ids for requested domain.
+     */
+    upsertUrlsAndWait(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
+    /**
+     * Upsert urls into the document system.  Supported formats: txt, md, html, pdf, doc, docx, xls, xlsx, ppt, pptx, Youtube transcripts (form Youtube videos)
+     * Upsert urls, returns list of upserted file ids for requested domain.
+     * (alias to upsertUrlsAndWait)
+     */
+    upsertUrls(requestParameters: UpsertUrlsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BatchStatusData>;
 }

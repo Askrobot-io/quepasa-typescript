@@ -28,6 +28,30 @@ export interface SetupTelegramRequest {
      * @memberof SetupTelegramRequest
      */
     commands?: SetupTelegramRequestCommands;
+    /**
+     * (Optional) The name of a group of documents.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    domain?: string;
+    /**
+     * (Optional) This is the model that will generate answers to questions based on the retrieved search results.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    llm?: string;
+    /**
+     * (Optional) The prompt used for RAG, with placeholders like {{LANGUAGE}} for the language in which the question was asked, and {{SOURCES}} for listing the relevant chunks.
+     * @type {string}
+     * @memberof SetupTelegramRequest
+     */
+    prompt?: string;
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof SetupTelegramRequest
+     */
+    userNames?: Array<string>;
 }
 /**
  * Check if a given object implements the SetupTelegramRequest interface.

@@ -34,6 +34,10 @@ function SetupTelegramRequestFromJSONTyped(json, ignoreDiscriminator) {
     return {
         'token': json['token'] == null ? undefined : json['token'],
         'commands': json['commands'] == null ? undefined : (0, SetupTelegramRequestCommands_1.SetupTelegramRequestCommandsFromJSON)(json['commands']),
+        'domain': json['domain'] == null ? undefined : json['domain'],
+        'llm': json['llm'] == null ? undefined : json['llm'],
+        'prompt': json['prompt'] == null ? undefined : json['prompt'],
+        'userNames': json['user_names'] == null ? undefined : json['user_names'],
     };
 }
 function SetupTelegramRequestToJSON(value) {
@@ -43,5 +47,9 @@ function SetupTelegramRequestToJSON(value) {
     return {
         'token': value['token'],
         'commands': (0, SetupTelegramRequestCommands_1.SetupTelegramRequestCommandsToJSON)(value['commands']),
+        'domain': value['domain'],
+        'llm': value['llm'],
+        'prompt': value['prompt'],
+        'user_names': value['userNames'],
     };
 }

@@ -11,6 +11,7 @@
  */
 import type { RetrieveRequestUserInfo } from './RetrieveRequestUserInfo';
 import type { RetrieveRelevanceWeights } from './RetrieveRelevanceWeights';
+import type { RetrieveFormulaRelevanceWeights } from './RetrieveFormulaRelevanceWeights';
 /**
  *
  * @export
@@ -36,6 +37,7 @@ export interface RetrieveAnswerRequest {
      * - mistral:mistral-large-2402
      * - anthropic:claude-3-5-sonnet-20240620
      * - replicate:meta-llama-3-70b-instruct
+     *
      * @type {string}
      * @memberof RetrieveAnswerRequest
      */
@@ -43,7 +45,7 @@ export interface RetrieveAnswerRequest {
     /**
      * The prompt used for RAG, with placeholders like {{LANGUAGE}} for the language in which the question was asked, and {{SOURCES}} for listing the relevant chunks.
      * For example
-     * ```
+     * ```plaintext
      * You're a bot-assistant that answers the questions.
      *
      * When answering the question, use the following rules:
@@ -56,6 +58,7 @@ export interface RetrieveAnswerRequest {
      * Sources:
      * {{SOURCES}}
      * ```
+     *
      * @type {string}
      * @memberof RetrieveAnswerRequest
      */
@@ -75,16 +78,47 @@ export interface RetrieveAnswerRequest {
     prompt_total_size?: number;
     /**
      * A hybrid ranking formula for documents, balancing two parameters: text for full-text search and semantic for semantic search. The format allows you to adjust the weight of each component.
+     *
+     * @type {RetrieveFormulaRelevanceWeights}
+     * @memberof RetrieveAnswerRequest
+     */
+    relevance_weights?: RetrieveFormulaRelevanceWeights;
+    /**
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveAnswerRequest
      */
     document_relevance_weights?: RetrieveRelevanceWeights;
     /**
-     * A hybrid ranking formula for document chunks, using the same two parameters as document_relevance_weights: text for full-text search and semantic for semantic search. This adjusts the relevance of different chunks of a document based on these weights.
+     *
      * @type {RetrieveRelevanceWeights}
      * @memberof RetrieveAnswerRequest
      */
     chunk_relevance_weights?: RetrieveRelevanceWeights;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder both documents and chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder documents based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    document_reranker_prompt?: string;
+    /**
+     * A prompt template used by the reranking model to prioritize and reorder chunks based on their relevance to a query.
+     * This prompt guides the model in assessing the importance of each document and refining the ranking output.
+     *
+     * @type {string}
+     * @memberof RetrieveAnswerRequest
+     */
+    chunk_reranker_prompt?: string;
     /**
      * User info to track requests.
      * @type {RetrieveRequestUserInfo}
