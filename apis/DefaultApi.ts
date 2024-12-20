@@ -32,6 +32,7 @@ import type {
   OperationFailedStatus,
   RetrieveAnswerRequest,
   RetrieveChunksRequest,
+  RetrieveWikiRequest,
   SetupTelegramRequest,
   TelegramStatus,
 } from '../models/index';
@@ -60,6 +61,8 @@ import {
     RetrieveAnswerRequestToJSON,
     RetrieveChunksRequestFromJSON,
     RetrieveChunksRequestToJSON,
+    RetrieveWikiRequestFromJSON,
+    RetrieveWikiRequestToJSON,
     SetupTelegramRequestFromJSON,
     SetupTelegramRequestToJSON,
     TelegramStatusFromJSON,
@@ -599,6 +602,50 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetailData> {
         const response = await this.retrieveAnswerRaw(requestParameters, initOverrides);
+        let result = await response.value();
+        if ( result['data'] == null ) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
+    }
+
+    /**
+     * Generate a wiki page based on your data.
+     * Retrieve wiki
+     */
+    async retrieveWikiRaw(requestParameters: RetrieveWikiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AnswerDetail>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        const response = await this.request({
+            path: "/retrieve/wiki",
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: RetrieveWikiRequestToJSON(requestParameters),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AnswerDetailFromJSON(jsonValue));
+    }
+
+    /**
+     * Generate a wiki page based on your data.
+     * Retrieve wiki
+     */
+    async retrieveWiki(requestParameters: RetrieveWikiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetailData> {
+        const response =await this.retrieveWikiRaw(requestParameters, initOverrides);
         let result = await response.value();
         if ( result['data'] == null ) {
             throw new Error('Response returned an "data" that was null or undefined.');

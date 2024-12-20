@@ -38,6 +38,7 @@ function AnswerDetailDataFromJSONTyped(json, ignoreDiscriminator) {
         'links': json['links'] == null ? undefined : ((0, runtime_1.mapValues)(json['links'], AnswerDetailDataLinksValue_1.AnswerDetailDataLinksValueFromJSON)),
         'markdown': json['markdown'] == null ? undefined : json['markdown'],
         'labeledLinks': json['labeled_links'] == null ? undefined : ((0, runtime_1.mapValues)(json['labeled_links'], AnswerDetailDataLabeledLinksValue_1.AnswerDetailDataLabeledLinksValueFromJSON)),
+        'data': json['data'] == null ? undefined : json['data'],
     };
 }
 function AnswerDetailDataToJSON(value) {

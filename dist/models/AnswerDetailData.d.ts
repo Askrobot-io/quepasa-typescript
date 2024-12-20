@@ -45,6 +45,7 @@ export interface AnswerDetailData {
     labeledLinks?: {
         [key: string]: AnswerDetailDataLabeledLinksValue;
     };
+    data?: any;
 }
 /**
  * Check if a given object implements the AnswerDetailData interface.

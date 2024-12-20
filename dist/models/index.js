@@ -37,6 +37,7 @@ __exportStar(require("./DocumentNotFound"), exports);
 __exportStar(require("./DocumentPagesInner"), exports);
 __exportStar(require("./OperationFailedStatus"), exports);
 __exportStar(require("./RetrieveAnswerRequest"), exports);
+__exportStar(require("./RetrieveWikiRequest"), exports);
 __exportStar(require("./RetrieveChunksRequest"), exports);
 __exportStar(require("./RetrieveRequestUserInfo"), exports);
 __exportStar(require("./RetrieveRelevanceWeights"), exports);

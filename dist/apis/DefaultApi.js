@@ -411,6 +411,42 @@ class DefaultApi extends runtime.BaseAPI {
         return result['data'];
     }
     /**
+     * Generate a wiki page based on your data.
+     * Retrieve wiki
+     */
+    async retrieveWikiRaw(requestParameters, initOverrides) {
+        const queryParameters = {};
+        const headerParameters = {};
+        headerParameters['Content-Type'] = 'application/json';
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: "/retrieve/wiki",
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: (0, index_1.RetrieveWikiRequestToJSON)(requestParameters),
+        }, initOverrides);
+        return new runtime.JSONApiResponse(response, (jsonValue) => (0, index_1.AnswerDetailFromJSON)(jsonValue));
+    }
+    /**
+     * Generate a wiki page based on your data.
+     * Retrieve wiki
+     */
+    async retrieveWiki(requestParameters, initOverrides) {
+        const response = await this.retrieveWikiRaw(requestParameters, initOverrides);
+        let result = await response.value();
+        if (result['data'] == null) {
+            throw new Error('Response returned an "data" that was null or undefined.');
+        }
+        return result['data'];
+    }
+    /**
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data
      */

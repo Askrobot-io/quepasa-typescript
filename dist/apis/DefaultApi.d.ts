@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 import * as runtime from '../runtime';
-import type { AnswerDetail, AnswerDetailData, BatchStatus, BatchStatusData, ChunksDetail, ChunksDetailDataInner, CreatedBatchStatus, Document, DocumentDetail, DocumentDetailData, DomainDetail, DomainDetailData, DomainListDetail, RetrieveAnswerRequest, RetrieveChunksRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
+import type { AnswerDetail, AnswerDetailData, BatchStatus, BatchStatusData, ChunksDetail, ChunksDetailDataInner, CreatedBatchStatus, Document, DocumentDetail, DocumentDetailData, DomainDetail, DomainDetailData, DomainListDetail, RetrieveAnswerRequest, RetrieveChunksRequest, RetrieveWikiRequest, SetupTelegramRequest, TelegramStatus } from '../models/index';
 export interface GetBatchStatusRequest {
     id: string;
 }
@@ -175,6 +175,16 @@ export declare class DefaultApi extends runtime.BaseAPI {
      * Retrieve answers or search data
      */
     retrieveAnswer(requestParameters: RetrieveAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetailData>;
+    /**
+     * Generate a wiki page based on your data.
+     * Retrieve wiki
+     */
+    retrieveWikiRaw(requestParameters: RetrieveWikiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AnswerDetail>>;
+    /**
+     * Generate a wiki page based on your data.
+     * Retrieve wiki
+     */
+    retrieveWiki(requestParameters: RetrieveWikiRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AnswerDetailData>;
     /**
      * This endpoint allows you to perform a search on your data.
      * Retrieve answers or search data

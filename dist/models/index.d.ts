@@ -19,6 +19,7 @@ export * from './DocumentNotFound';
 export * from './DocumentPagesInner';
 export * from './OperationFailedStatus';
 export * from './RetrieveAnswerRequest';
+export * from './RetrieveWikiRequest';
 export * from './RetrieveChunksRequest';
 export * from './RetrieveRequestUserInfo';
 export * from './RetrieveRelevanceWeights';
